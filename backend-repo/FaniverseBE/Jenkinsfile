@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/20211130/Faniverse-DevOps.git'
+            }
+        }
+
+        stage('Build image') {
+            steps {
+                script {
+                    // Dockerfile이 있는 디렉토리로 이동
+                    dir('backend-repo/FaniverseBE') {
+                        // Docker 이미지 빌드
+                        echo "Building Docker image..."
+                        app = docker.build("yejin20211130/faniverse")
+                    }
+                }
+            }
+        }
+
+        stage('Test image') {
+            steps {
+                script {
+                    // Docker 이미지로 테스트 실행
+                    echo "Testing Docker image..."
+                    app.inside {
+                        // 예시: 애플리케이션의 상태를 확인하는 명령어
+                        sh 'curl -f http://localhost:8080/health'
+                    }
+                }
+            }
+        }
+
+        stage('Push image') {
+            steps {
+                script {
+                    // Docker Hub에 로그인 후 이미지 푸시
+                    echo "Pushing Docker image to Docker Hub..."
+                    docker.withRegistry('https://registry.hub.docker.com', 'yejin20211130') {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Docker 이미지가 성공적으로 빌드되고 푸시되었습니다."
+        }
+        failure {
+            echo "Docker 이미지 빌드 또는 푸시 실패."
+        }
+    }
+}
