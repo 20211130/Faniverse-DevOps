@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     stages {
         stage('Clone repository') {
             steps {
@@ -43,18 +42,8 @@ pipeline {
                 echo "Pushing Docker image to Docker Hub..."
                 withDockerRegistry([credentialsId: yejin20211130, url: 'https://hub.docker.com/r/yejin20211130/faniverse']) {
 		    sh 'docker push yejin20211130/faniverse:latest'
-                    }
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "Docker 이미지가 성공적으로 빌드, 테스트 및 푸시되었습니다."
-        }
-        failure {
-            echo "Docker 이미지 빌드 또는 푸시 실패."
-        }
+		}
+	    }
+	}
     }
 }
