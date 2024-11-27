@@ -7,6 +7,14 @@ pipeline {
             }
         }
 
+	stage('Build Backend') {
+	    steps {
+		dir('backend-repo/FaniverseBE') {
+		    sh './gradlew clean build'
+		}
+	    }
+	}
+
         stage('Build image') {
             steps {
                 // Dockerfile이 있는 디렉토리로 이동
