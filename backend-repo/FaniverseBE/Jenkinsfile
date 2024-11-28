@@ -28,15 +28,19 @@ pipeline {
 
         stage('Build Image') {
             steps {
-                app = docker.build("yejin20211130/faniverse:latest", "backend-repo/FaniverseBE")
+		script {
+                    app = docker.build("yejin20211130/faniverse:latest", "backend-repo/FaniverseBE")
+		}
 	    }
 	}
 
         stage('Push image') {
             steps {
-                docker.withRegistry('https://registry.hub.docker.com', 'yejin20211130') {
-                    app.push("${env.BUILD_NUMBER}")
-        	    app.push("latest")
+		script {
+		    docker.withRegistry('https://registry.hub.docker.com', 'yejin20211130') {
+                        app.push("${env.BUILD_NUMBER}")
+        	        app.push("latest")
+		    }
 		}
 	    }
 	}
