@@ -1,5 +1,15 @@
 pipeline {
     agent any
+
+    tools {
+        jdk 'jdk21'
+    }
+
+    environment {
+        JAVA_HOME = "${tool 'jdk21'}"
+        PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
+    }
+    
     stages {
         stage('Clone repository') {
             steps {
@@ -7,50 +17,26 @@ pipeline {
             }
         }
 
-	stage('Build Backend') {
-	    steps {
-		dir('backend-repo/FaniverseBE') {
-		    sh 'chmod +x gradlew'
-		    sh './gradlew clean build'
-		}
-	    }
-	}
-
-        stage('Build image') {
+        stage('Build Backend') {
             steps {
-                // Dockerfile이 있는 디렉토리로 이동
                 dir('backend-repo/FaniverseBE') {
-		    // Docker 이미지 빌드
-                    sh 'docker image build -t yejin20211130/faniverse:latest .'
+                    sh 'chmod +x gradlew'
+                    sh './gradlew clean build'
                 }
-	    }
+            }
         }
 
-        stage('Test image') {
+        stage('Build Image') {
             steps {
-		script {
-		    // 도커 이미지로 컨테이너 실행
-		    sh 'docker container run --name faniverse-con -d -p 8080:8080 yejin20211130/faniverse:latest'
-		    // Postman 이용하여 API 테스트 (추후 추가...)
-		    try {
-			// 서버 기동 시간 확보
-		    	sh 'sleep 5'
-			// 간단한 API 테스트
-		    	sh 'curl -X GET http://localhost:8080/api/test || exit 1'
-		    } finally {
-			// 테스트 후 컨테이너 중지 및 삭제
-			sh 'docker container stop faniverse-con && docker container rm faniverse-con'
-        	    }
-		}
+                app = docker.build("yejin20211130/faniverse:latest", "backend-repo/FaniverseBE")
 	    }
 	}
 
         stage('Push image') {
             steps {
-		// Docker Hub에 로그인 후 이미지 푸시
-                echo "Pushing Docker image to Docker Hub..."
-                withDockerRegistry([credentialsId: yejin20211130, url: 'https://hub.docker.com/r/yejin20211130/faniverse']) {
-		    sh 'docker push yejin20211130/faniverse:latest'
+                docker.withRegistry('https://registry.hub.docker.com', 'yejin20211130') {
+                    app.push("${env.BUILD_NUMBER}")
+        	    app.push("latest")
 		}
 	    }
 	}
