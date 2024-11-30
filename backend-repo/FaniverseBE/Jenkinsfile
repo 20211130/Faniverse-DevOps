@@ -51,8 +51,15 @@ pipeline {
         
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f backend-repo/FaniverseBE/deployment.yml'
-                }
+                kubernetesEngineBuilder(
+                    projectId: PROJECT_ID, 
+                    clusterName: CLUSTER_NAME, 
+                    location: LOCATION, 
+                    manifestPattern: 'backend-repo/FaniverseBE/deployment.yml', 
+                    credentialsId: CREDENTIALS_ID, 
+                    verifyDeployments: true
+		)
+            }
         }
     }
 }
