@@ -51,7 +51,7 @@ pipeline {
         
         stage('Deploy to Kubernetes') {
             steps {
-		sh "sed -i 's/faniverse:latest/faniverse:${env.BUILD_ID}/g' deployment.yml"
+		sh "sed -i 's/faniverse:latest/faniverse:${env.BUILD_ID}/g' backend-repo/FaniverseBE/deployment.yml"
 		step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
             }
         }
