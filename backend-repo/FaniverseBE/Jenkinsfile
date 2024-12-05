@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     // .env 파일 생성
-		    sh 'touch backend-repo/FaniverseBE/faniverse.env
+		    sh 'touch backend-repo/FaniverseBE/faniverse.env'
 
 		    // .env 파일에 환경변수 값 추가
                     sh """
