@@ -24,7 +24,9 @@ pipeline {
 	stage('Generate .env file') {
             steps {
                 dir('backend-repo/FaniverseBE') {
+                    // 파일이 이미 존재한다면 삭제하고, 새로 생성
                     sh '''
+                        if [ -d .env ]; then rm -rf .env; fi
                         touch .env
                         echo "SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL" >> .env
                         echo "SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME" >> .env
