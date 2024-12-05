@@ -26,12 +26,12 @@ pipeline {
                 dir('backend-repo/FaniverseBE') {
                     sh '''
                         touch .env
-                        echo "SPRING_DATASOURCE_URL=${credentials('SPRING_DATASOURCE_URL')}" >> .env
-                        echo "SPRING_DATASOURCE_USERNAME=${credentials('SPRING_DATASOURCE_USERNAME')}" >> .env
-                        echo "SPRING_DATASOURCE_PASSWORD=${credentials('SPRING_DATASOURCE_PASSWORD')}" >> .env
-                        echo "GCP_BUCKET=${credentials('GCP_BUCKET')}" >> .env
-                        echo "GCP_PROJECT_ID=${credentials('GCP_PROJECT_ID')}" >> .env
-                        echo "GCP_STORAGE_CREDENTIALS_JSON=${credentials('GCP_STORAGE_CREDENTIALS_JSON')}" >> .env
+                        echo "SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL" >> .env
+                        echo "SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME" >> .env
+                        echo "SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD" >> .env
+                        echo "GCP_BUCKET=$GCP_BUCKET" >> .env
+                        echo "GCP_PROJECT_ID=$GCP_PROJECT_ID" >> .env
+                        echo "GCP_STORAGE_CREDENTIALS_JSON=$GCP_STORAGE_CREDENTIALS_JSON" >> .env
                     '''
                 }
             }
