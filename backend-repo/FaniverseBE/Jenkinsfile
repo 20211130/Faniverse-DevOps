@@ -70,7 +70,7 @@ pipeline {
 		    sh "docker rm -f faniverse-con"
 			
                     // Docker 컨테이너 실행 (이미지를 백그라운드에서 실행)
-                    sh "docker run -d --name faniverse-con -p 8081:8080 -v backend-repo/FaniverseBE/.env:/app/.env yejin20211130/faniverse:latest"
+                    sh "docker run -d --name faniverse-con -p 8081:8080 --env-file backend-repo/FaniverseBE/.env yejin20211130/faniverse:latest"
 
                     // 컨테이너 상태 확인
 		    sh "sleep 5"
