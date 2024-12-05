@@ -27,12 +27,12 @@ pipeline {
                     // 환경 변수 값을 Jenkins에서 환경 변수로 설정하고 사용하도록 변경
                     sh '''
                         cd backend-repo/FaniverseBE
-                        echo SPRING_DATASOURCE_URL=${env.SPRING_DATASOURCE_URL} > faniverse-env
-                        echo SPRING_DATASOURCE_USERNAME=${env.SPRING_DATASOURCE_USERNAME} >> faniverse-env
-                        echo SPRING_DATASOURCE_PASSWORD=${env.SPRING_DATASOURCE_PASSWORD} >> faniverse-env
-                        echo GCP_BUCKET=${env.GCP_BUCKET} >> faniverse-env
-                        echo GCP_PROJECT_ID=${env.GCP_PROJECT_ID} >> faniverse-env
-                        echo GCP_STORAGE_CREDENTIALS_JSON=${env.GCP_STORAGE_CREDENTIALS_JSON} >> faniverse-env
+                        echo "SPRING_DATASOURCE_URL=${env.SPRING_DATASOURCE_URL}" > faniverse-env
+                        echo "SPRING_DATASOURCE_USERNAME=${env.SPRING_DATASOURCE_USERNAME}" >> faniverse-env
+                        echo "SPRING_DATASOURCE_PASSWORD=${env.SPRING_DATASOURCE_PASSWORD}" >> faniverse-env
+                        echo "GCP_BUCKET=${env.GCP_BUCKET}" >> faniverse-env
+                        echo "GCP_PROJECT_ID=${env.GCP_PROJECT_ID}" >> faniverse-env
+                        echo "GCP_STORAGE_CREDENTIALS_JSON=${env.GCP_STORAGE_CREDENTIALS_JSON}" >> faniverse-env
                     '''
                 }
             }
