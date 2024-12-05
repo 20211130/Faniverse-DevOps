@@ -27,19 +27,13 @@ pipeline {
                     sh '''
 		        # 디렉토리 권한을 변경하여 쓰기 권한 부여
                         chmod u+w .
-			
-		        # .env 디렉토리가 존재한다면 삭제하고, 새로 생성
-                        if [ -d .env ]; then rm -rf .env; fi
-			
-			# .env 파일이 존재하지 않으면 새로 생성
-                        if [ ! -f .env ]; then touch .env; fi
-			
-                        echo SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL >> .env
-                        echo SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME >> .env
-                        echo SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD >> .env
-                        echo GCP_BUCKET=$GCP_BUCKET >> .env
-                        echo GCP_PROJECT_ID=$GCP_PROJECT_ID >> .env
-                        echo GCP_STORAGE_CREDENTIALS_JSON=$GCP_STORAGE_CREDENTIALS_JSON >> .env
+			touch faniverse-env
+                        echo SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL >> faniverse-env
+                        echo SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME >> faniverse-env
+                        echo SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD >> faniverse-env
+                        echo GCP_BUCKET=$GCP_BUCKET >> faniverse-env
+                        echo GCP_PROJECT_ID=$GCP_PROJECT_ID >> faniverse-env
+                        echo GCP_STORAGE_CREDENTIALS_JSON=$GCP_STORAGE_CREDENTIALS_JSON >> faniverse-env
                     '''
                 }
             }
@@ -70,10 +64,10 @@ pipeline {
 			
 		    // test
 		    sh "echo $WORKSPACE"
-	   	    sh "ls -l $WORKSPACE/backend-repo/FaniverseBE/.env"
+	   	    sh "ls -l $WORKSPACE/backend-repo/FaniverseBE/faniverse-env"
 			
                     // Docker 컨테이너 실행 (이미지를 백그라운드에서 실행)
-                    sh "docker run -d --name faniverse-con -p 8081:8080 -v $WORKSPACE/backend-repo/FaniverseBE/.env:/app/.env yejin20211130/faniverse:latest"
+                    sh "docker run -d --name faniverse-con -p 8081:8080 -v $WORKSPACE/backend-repo/FaniverseBE/faniverse-env:/app/.env yejin20211130/faniverse:latest"
 
                     // 컨테이너 상태 확인
 		    sh "sleep 5"
