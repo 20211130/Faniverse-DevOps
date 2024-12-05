@@ -22,23 +22,22 @@ pipeline {
         }
 
 	stage('Generate .env file') {
-    steps {
-        script {
-            // .env 파일을 backend-repo/FaniverseBE 디렉토리에 생성
-            dir("$WORKSPACE/backend-repo/FaniverseBE") {
-                def envContent = """SPRING_DATASOURCE_URL=${credentials('SPRING_DATASOURCE_URL')}
+            steps {
+                script {
+                    // .env 파일을 backend-repo/FaniverseBE 디렉토리에 생성
+                    dir("$WORKSPACE/backend-repo/FaniverseBE") {
+                        def envContent = """SPRING_DATASOURCE_URL=${credentials('SPRING_DATASOURCE_URL')}
 SPRING_DATASOURCE_USERNAME=${credentials('SPRING_DATASOURCE_USERNAME')}
 SPRING_DATASOURCE_PASSWORD=${credentials('SPRING_DATASOURCE_PASSWORD')}
 GCP_BUCKET=${credentials('GCP_BUCKET')}
 GCP_PROJECT_ID=${credentials('GCP_PROJECT_ID')}
 GCP_STORAGE_CREDENTIALS_JSON=${credentials('GCP_STORAGE_CREDENTIALS_JSON')}
 """
-                writeFile file: '.env', text: envContent
+                        writeFile file: '.env', text: envContent
+                    }
+                }
             }
         }
-    }
-}
-
 
         stage('Build Backend') {
             steps {
