@@ -21,6 +21,23 @@ pipeline {
             }
         }
 
+	stage('Generate .env file') {
+            steps {
+                script {
+                    // .env 파일을 생성하여 환경변수들 넣기
+                    def envContent = """SPRING_DATASOURCE_URL=${credentials('SPRING_DATASOURCE_URL')}
+SPRING_DATASOURCE_USERNAME=${credentials('SPRING_DATASOURCE_USERNAME')}
+SPRING_DATASOURCE_PASSWORD=${credentials('SPRING_DATASOURCE_PASSWORD')}
+GCP_BUCKET=${credentials('GCP_BUCKET')}
+GCP_PROJECT_ID=${credentials('GCP_PROJECT_ID')}
+GCP_STORAGE_CREDENTIALS_JSON=${credentials('GCP_STORAGE_CREDENTIALS_JSON')}
+"""
+                    // .env 파일로 저장
+                    writeFile file: 'backend-repo/FaniverseBE/.env', text: envContent
+                }
+            }
+        }
+
         stage('Build Backend') {
             steps {
                 dir('backend-repo/FaniverseBE') {
@@ -37,6 +54,25 @@ pipeline {
 		}
 	    }
 	}
+
+	stage('Run Docker Container for Testing') {
+            steps {
+                script {
+		    // 기존에 동일한 이름의 컨테이너가 있다면 중지하고 제거
+                    sh "docker ps -q -f name=faniverse-con | xargs -r docker stop | xargs -r docker rm"
+			
+                    // Docker 컨테이너 실행 (이미지를 백그라운드에서 실행)
+                    sh "docker run -d --name faniverse-con -p 8081:8080 yejin20211130/faniverse:latest"
+                    
+                    // 컨테이너 상태 확인
+                    sh "docker ps -a"
+
+                    // 컨테이너 정리 (푸시 전에)
+                    //sh "docker stop faniverse-con"
+                    //sh "docker rm faniverse-con"
+                }
+            }
+        }
 
         stage('Push image') {
             steps {
