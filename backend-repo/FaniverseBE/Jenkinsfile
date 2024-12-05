@@ -24,15 +24,22 @@ pipeline {
 	stage('Generate .env file') {
             steps {
                 dir('backend-repo/FaniverseBE') {
-                    // 파일이 이미 존재한다면 삭제하고, 새로 생성
                     sh '''
+		        # 디렉토리 권한을 변경하여 쓰기 권한 부여
+                        chmod u+w .
+			
+		        // .env 디렉토리가 존재한다면 삭제하고, 새로 생성
                         if [ -d .env ]; then rm -rf .env; fi
-                        echo "SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL" >> .env
-                        echo "SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME" >> .env
-                        echo "SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD" >> .env
-                        echo "GCP_BUCKET=$GCP_BUCKET" >> .env
-                        echo "GCP_PROJECT_ID=$GCP_PROJECT_ID" >> .env
-                        echo "GCP_STORAGE_CREDENTIALS_JSON=$GCP_STORAGE_CREDENTIALS_JSON" >> .env
+			
+			# .env 파일이 존재하지 않으면 새로 생성
+                        if [ ! -f .env ]; then touch .env; fi
+			
+                        echo SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL >> .env
+                        echo SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME >> .env
+                        echo SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD >> .env
+                        echo GCP_BUCKET=$GCP_BUCKET >> .env
+                        echo GCP_PROJECT_ID=$GCP_PROJECT_ID >> .env
+                        echo GCP_STORAGE_CREDENTIALS_JSON=$GCP_STORAGE_CREDENTIALS_JSON >> .env
                     '''
                 }
             }
