@@ -44,7 +44,7 @@ pipeline {
                         echo "GCP_BUCKET=${GCP_BUCKET}" >> backend-repo/FaniverseBE/faniverse.env
                         echo "GCP_PROJECT_ID=${GCP_PROJECT_ID}" >> backend-repo/FaniverseBE/faniverse.env
                         echo "GCP_STORAGE_CREDENTIALS_JSON=${GCP_STORAGE_CREDENTIALS_JSON}" >> backend-repo/FaniverseBE/faniverse.env
-                    '''
+                    """
                 }
             }
         }
