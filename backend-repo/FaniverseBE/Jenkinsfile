@@ -26,7 +26,8 @@ pipeline {
                 script {
                     // 환경 변수 값을 Jenkins에서 환경 변수로 설정하고 사용하도록 변경
                     sh '''
-                        cd backend-repo/FaniverseBE
+                        cd $WORKSPACE/backend-repo/FaniverseBE
+			sudo chown -R yejin:yejin /var/jenkins_home/workspace/docker-pipeline_PR-10/backend-repo/FaniverseBE
 			rm -rf faniverse.env
                         echo "SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}" > faniverse.env
                         echo "SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}" >> faniverse.env
