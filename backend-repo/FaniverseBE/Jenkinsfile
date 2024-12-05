@@ -27,12 +27,13 @@ pipeline {
                     // 환경 변수 값을 Jenkins에서 환경 변수로 설정하고 사용하도록 변경
                     sh '''
                         cd backend-repo/FaniverseBE
-                        echo "SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}" > faniverse-env
-                        echo "SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}" >> faniverse-env
-                        echo "SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}" >> faniverse-env
-                        echo "GCP_BUCKET=${GCP_BUCKET}" >> faniverse-env
-                        echo "GCP_PROJECT_ID=${GCP_PROJECT_ID}" >> faniverse-env
-                        echo "GCP_STORAGE_CREDENTIALS_JSON=${GCP_STORAGE_CREDENTIALS_JSON}" >> faniverse-env
+			rm -rf faniverse.env
+                        echo "SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}" > faniverse.env
+                        echo "SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}" >> faniverse.env
+                        echo "SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}" >> faniverse.env
+                        echo "GCP_BUCKET=${GCP_BUCKET}" >> faniverse.env
+                        echo "GCP_PROJECT_ID=${GCP_PROJECT_ID}" >> faniverse.env
+                        echo "GCP_STORAGE_CREDENTIALS_JSON=${GCP_STORAGE_CREDENTIALS_JSON}" >> faniverse.env
                     '''
                 }
             }
@@ -63,10 +64,10 @@ pipeline {
 			
 		    // test
 		    sh "echo $WORKSPACE"
-	   	    sh "ls -l $WORKSPACE/backend-repo/FaniverseBE/faniverse-env"
+	   	    sh "ls -l $WORKSPACE/backend-repo/FaniverseBE/faniverse.env"
 			
                     // Docker 컨테이너 실행 (이미지를 백그라운드에서 실행)
-                    sh "docker run -d --name faniverse-con -p 8081:8080 -v $WORKSPACE/backend-repo/FaniverseBE/faniverse-env:/app/.env yejin20211130/faniverse:latest"
+                    sh "docker run -d --name faniverse-con -p 8081:8080 -v $WORKSPACE/backend-repo/FaniverseBE/faniverse.env:/app/.env yejin20211130/faniverse:latest"
 
                     // 컨테이너 상태 확인
 		    sh "sleep 5"
