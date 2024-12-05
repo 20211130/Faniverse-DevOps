@@ -58,13 +58,14 @@ GCP_STORAGE_CREDENTIALS_JSON=${credentials('GCP_STORAGE_CREDENTIALS_JSON')}
 	stage('Run Docker Container for Testing') {
             steps {
                 script {
-		    // 기존에 동일한 이름의 컨테이너가 있다면 중지하고 제거
-                    sh "docker ps -q -f name=faniverse-con | xargs -r docker stop | xargs -r docker rm"
+		    // 기존에 동일한 이름의 컨테이너가 있다면 제거
+		    docker rm -f faniverse-con
 			
                     // Docker 컨테이너 실행 (이미지를 백그라운드에서 실행)
                     sh "docker run -d --name faniverse-con -p 8081:8080 yejin20211130/faniverse:latest"
-                    
+
                     // 컨테이너 상태 확인
+		    sh "sleep 5"
                     sh "docker ps -a"
 
                     // 컨테이너 정리 (푸시 전에)
