@@ -100,6 +100,11 @@ pipeline {
             steps {
 		sh "sed -i 's/faniverse:latest/faniverse:${env.BUILD_ID}/g' backend-repo/FaniverseBE/deployment.yml"
 		step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'backend-repo/FaniverseBE/deployment.yml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+
+		// 잘 작동하는지 확인
+		sh 'kubectl get deployment'
+		sh 'kubectl get svc'
+		sh 'kubectl get pods'
             }
         }
     }
