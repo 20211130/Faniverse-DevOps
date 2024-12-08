@@ -4,11 +4,11 @@ FROM openjdk:21-jdk-slim
 # 작업 디렉토리 생성
 WORKDIR /app
 
-# 소스 코드 복사
-COPY . /app
+# .env 파일 복사
+COPY .env /app/.env
 
-# Gradle 빌드 실행
-RUN ./gradlew build
+# 프로젝트의 JAR 파일 복사
+COPY build/libs/*.jar app.jar
 
 # JAR 파일 실행
-ENTRYPOINT ["java", "-jar", "build/libs/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
