@@ -53,10 +53,7 @@ public class AuthController {
 
         // User 객체를 LoginResponseDto로 변환
         LoginResponseDto loginResponseDto = new LoginResponseDto(
-            user.getId(), 
-            user.getEmail(), 
-            user.getUsername() + " - CI/CD Deployed!"
-        );
+            user.getId(), user.getEmail(), user.getUsername());
 
         return ResponseEntity.ok(loginResponseDto);
     }
