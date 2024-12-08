@@ -17,7 +17,7 @@ spec:
           image: yejin20211130/faniverse:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
               protocol: TCP
           envFrom:
             - secretRef: 
@@ -33,6 +33,6 @@ spec:
   ports:
     - port: 80
       protocol: TCP
-      targetPort: 8080
+      targetPort: 8081
   selector:
     app: faniverse-backend
