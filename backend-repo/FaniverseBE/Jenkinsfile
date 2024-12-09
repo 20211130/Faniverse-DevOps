@@ -77,10 +77,6 @@ pipeline {
 		    sh "sleep 5"
                     sh "docker ps -a"
 		    sh "docker logs faniverse-con"
-
-                    // 컨테이너 정리 (푸시 전에)
-                    //sh "docker stop faniverse-con"
-                    //sh "docker rm faniverse-con"
                 }
             }
         }
