@@ -55,7 +55,7 @@ public class AuthController {
         LoginResponseDto loginResponseDto = new LoginResponseDto(
     user.getId(),
     user.getEmail(),
-    user.getUsername() + " - CI/CD Deployed!"
+    user.getUsername() + " - ta_test CI/CD Deployed!"
 );
 
         return ResponseEntity.ok(loginResponseDto);
